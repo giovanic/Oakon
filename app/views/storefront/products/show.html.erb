@@ -1,0 +1,40 @@
+<% content_for :title, @product.name %>
+
+<p class="mb-6 text-sm">
+  <%= link_to "← Todos os produtos", root_path, class: "hover:underline" %>
+  ·
+  <%= link_to @product.category.name, category_path(@product.category.slug), class: "hover:underline" %>
+</p>
+
+<div class="grid gap-8 md:grid-cols-2">
+  <div>
+    <% if @product.images.attached? %>
+      <div class="grid grid-cols-3 gap-2">
+        <% @product.images.each do |image| %>
+          <%= image_tag image, class: "aspect-square w-full rounded object-cover", alt: @product.name %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="flex aspect-square w-full items-center justify-center rounded bg-gray-100 text-sm text-gray-400 dark:bg-gray-900">Sem imagem</div>
+    <% end %>
+  </div>
+
+  <div>
+    <h1 class="text-2xl font-semibold"><%= @product.name %></h1>
+    <p class="mt-2 text-xl font-semibold"><%= number_to_currency(@product.price) %></p>
+    <div class="mt-2">
+      <%= render Storefront::AvailabilityBadgeComponent.new(stock_quantity: @product.stock_quantity) %>
+    </div>
+    <p class="mt-4 whitespace-pre-line text-gray-700 dark:text-gray-300"><%= @product.description.presence || "Sem descrição." %></p>
+
+    <% if @product.stock_quantity.positive? %>
+      <%= form_with url: purchase_items_path, method: :post, class: "mt-4 flex items-center gap-2" do %>
+        <%= hidden_field_tag :product_id, @product.id %>
+        <%= number_field_tag :quantity, 1, min: 1, max: @product.stock_quantity,
+              class: "w-20 rounded border border-gray-200 p-2 dark:border-gray-800 dark:bg-gray-950" %>
+        <%= submit_tag "Adicionar ao carrinho",
+              class: "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 dark:bg-gray-100 dark:text-gray-900" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

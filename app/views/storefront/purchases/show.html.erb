@@ -1,0 +1,21 @@
+<% content_for :title, "Carrinho" %>
+
+<h1 class="mb-6 text-2xl font-semibold">Carrinho</h1>
+
+<% if @purchase.blank? || @purchase.purchase_items.empty? %>
+  <p class="text-gray-500 dark:text-gray-400">Seu carrinho está vazio.</p>
+  <%= link_to "Ver produtos", root_path, class: "mt-4 inline-block text-sm font-medium hover:underline" %>
+<% else %>
+  <div class="flex flex-col gap-3">
+    <% @purchase.purchase_items.includes(:product).each do |item| %>
+      <%= render Storefront::PurchaseItemRowComponent.new(purchase_item: item) %>
+    <% end %>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-800">
+    <span class="text-lg font-semibold">Total</span>
+    <span class="text-lg font-semibold"><%= number_to_currency(@purchase.total_price) %></span>
+  </div>
+
+  <%= link_to "Finalizar pedido", new_checkout_path, class: "mt-6 inline-block rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" %>
+<% end %>

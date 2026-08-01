@@ -1,0 +1,34 @@
+<div class="mx-auto max-w-4xl p-6">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">Categorias</h1>
+    <%= link_to "Nova categoria", new_admin_category_path, class: "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+  </div>
+
+  <div class="overflow-hidden rounded border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Nome</th>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Status</th>
+          <th class="px-4 py-2"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white">
+        <% @categories.each do |category| %>
+          <tr>
+            <td class="px-4 py-2 text-sm text-gray-900"><%= link_to category.name, admin_category_path(category), class: "hover:underline" %></td>
+            <td class="px-4 py-2"><%= render StatusBadgeComponent.new(active: category.active) %></td>
+            <td class="px-4 py-2 text-right text-sm">
+              <%= link_to "Editar", edit_admin_category_path(category), class: "text-gray-600 hover:underline" %>
+              <%= button_to "Remover", admin_category_path(category), method: :delete, class: "ml-3 inline text-red-600 hover:underline", form: { data: { turbo_confirm: "Remover esta categoria?" } } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @categories.empty? %>
+    <p class="mt-4 text-sm text-gray-500">Nenhuma categoria cadastrada.</p>
+  <% end %>
+</div>

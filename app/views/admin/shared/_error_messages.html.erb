@@ -1,0 +1,12 @@
+<% if record.errors.any? %>
+  <div class="mb-4 rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800">
+    <p class="font-medium">
+      <%= I18n.t("errors.messages.not_saved", count: record.errors.count, resource: record.class.model_name.human.downcase) %>
+    </p>
+    <ul class="mt-1 list-disc pl-5">
+      <% record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

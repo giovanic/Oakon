@@ -1,0 +1,19 @@
+<div class="flex items-center justify-between gap-3 rounded border border-gray-200 p-3 dark:border-gray-800">
+  <div>
+    <%= link_to purchase_item.product.name, product_path(purchase_item.product.slug), class: "font-medium hover:underline" %>
+    <p class="text-sm text-gray-500 dark:text-gray-400"><%= number_to_currency(purchase_item.product.price) %> / un.</p>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= form_with url: purchase_item_path(purchase_item), method: :patch, class: "flex items-center gap-2" do |f| %>
+      <%= f.number_field :quantity, value: purchase_item.quantity, min: 1, max: purchase_item.product.stock_quantity,
+            class: "w-16 rounded border border-gray-200 p-1 text-sm dark:border-gray-800 dark:bg-gray-950" %>
+      <%= f.submit "Atualizar", class: "text-sm font-medium hover:underline" %>
+    <% end %>
+
+    <span class="w-24 text-right font-semibold"><%= number_to_currency(purchase_item.subtotal) %></span>
+
+    <%= button_to "Remover", purchase_item_path(purchase_item), method: :delete,
+          class: "text-sm text-red-600 hover:underline dark:text-red-400", form: { class: "inline" } %>
+  </div>
+</div>

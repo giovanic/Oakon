@@ -1,0 +1,20 @@
+<div class="rounded border border-gray-200 p-3 dark:border-gray-800">
+  <%= link_to product_path(product.slug) do %>
+    <% if product.images.attached? %>
+      <%= image_tag product.images.first, class: "aspect-square w-full rounded object-cover", alt: product.name %>
+    <% else %>
+      <div class="flex aspect-square w-full items-center justify-center rounded bg-gray-100 text-sm text-gray-400 dark:bg-gray-900">Sem imagem</div>
+    <% end %>
+  <% end %>
+
+  <div class="mt-2">
+    <%= link_to product.name, product_path(product.slug), class: "text-sm font-medium hover:underline" %>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      <%= link_to product.category.name, category_path(product.category.slug), class: "hover:underline" %>
+    </p>
+    <div class="mt-1 flex items-center justify-between gap-2">
+      <span class="font-semibold"><%= number_to_currency(product.price) %></span>
+      <%= render Storefront::AvailabilityBadgeComponent.new(stock_quantity: product.stock_quantity) %>
+    </div>
+  </div>
+</div>

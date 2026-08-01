@@ -1,0 +1,22 @@
+<div class="mx-auto max-w-lg p-6">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900"><%= @category.name %></h1>
+    <%= render StatusBadgeComponent.new(active: @category.active) %>
+  </div>
+
+  <dl class="space-y-2 text-sm">
+    <div>
+      <dt class="font-medium text-gray-500">Slug</dt>
+      <dd class="text-gray-900"><%= @category.slug %></dd>
+    </div>
+    <div>
+      <dt class="font-medium text-gray-500">Produtos cadastrados</dt>
+      <dd class="text-gray-900"><%= @category.products.count %></dd>
+    </div>
+  </dl>
+
+  <div class="mt-6 flex items-center gap-3">
+    <%= link_to "Editar", edit_admin_category_path(@category), class: "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= link_to "Voltar", admin_categories_path, class: "text-sm text-gray-600 hover:underline" %>
+  </div>
+</div>

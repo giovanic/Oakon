@@ -1,0 +1,77 @@
+<% content_for :title, "Finalizar pedido" %>
+
+<h1 class="mb-6 text-2xl font-semibold">Finalizar pedido</h1>
+
+<%= render "storefront/shared/error_messages", record: @form %>
+
+<%= form_with url: checkout_path, scope: :checkout_form, method: :post, class: "space-y-6" do |form| %>
+  <div class="space-y-4">
+    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Seus dados</h2>
+
+    <div>
+      <%= form.label :customer_name, "Nome", class: "block text-sm font-medium" %>
+      <%= form.text_field :customer_name, value: @form.customer_name, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+    </div>
+
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <%= form.label :customer_email, "E-mail", class: "block text-sm font-medium" %>
+        <%= form.email_field :customer_email, value: @form.customer_email, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+      <div class="flex-1">
+        <%= form.label :customer_phone, "Telefone", class: "block text-sm font-medium" %>
+        <%= form.telephone_field :customer_phone, value: @form.customer_phone, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Endereço de entrega</h2>
+
+    <div class="flex gap-4">
+      <div class="flex-[3]">
+        <%= form.label :street, "Rua", class: "block text-sm font-medium" %>
+        <%= form.text_field :street, value: @form.street, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+      <div class="flex-1">
+        <%= form.label :number, "Número", class: "block text-sm font-medium" %>
+        <%= form.text_field :number, value: @form.number, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :complement, "Complemento", class: "block text-sm font-medium" %>
+      <%= form.text_field :complement, value: @form.complement, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :neighborhood, "Bairro", class: "block text-sm font-medium" %>
+      <%= form.text_field :neighborhood, value: @form.neighborhood, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+    </div>
+
+    <div class="flex gap-4">
+      <div class="flex-[2]">
+        <%= form.label :city, "Cidade", class: "block text-sm font-medium" %>
+        <%= form.text_field :city, value: @form.city, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+      <div class="flex-1">
+        <%= form.label :state, "UF", class: "block text-sm font-medium" %>
+        <%= form.text_field :state, value: @form.state, maxlength: 2, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+      <div class="flex-1">
+        <%= form.label :zip_code, "CEP", class: "block text-sm font-medium" %>
+        <%= form.text_field :zip_code, value: @form.zip_code, class: "mt-1 block w-full rounded border-gray-300 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-800">
+    <span class="text-lg font-semibold">Total</span>
+    <span class="text-lg font-semibold"><%= number_to_currency(@purchase.total_price) %></span>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= form.submit "Confirmar pedido", class: "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= link_to "Voltar ao carrinho", purchase_path, class: "text-sm text-gray-600 hover:underline dark:text-gray-400" %>
+  </div>
+<% end %>

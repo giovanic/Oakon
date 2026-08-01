@@ -1,0 +1,18 @@
+<% content_for :title, @category.name %>
+
+<p class="mb-2 text-sm"><%= link_to "← Todos os produtos", root_path, class: "hover:underline" %></p>
+<h1 class="mb-6 text-2xl font-semibold"><%= @category.name %></h1>
+
+<% if @products.any? %>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+    <% @products.each do |product| %>
+      <%= render Storefront::ProductCardComponent.new(product: product) %>
+    <% end %>
+  </div>
+
+  <nav class="mt-8 flex justify-center text-sm" aria-label="Paginação">
+    <%== pagy_nav(@pagy) %>
+  </nav>
+<% else %>
+  <p class="text-gray-500 dark:text-gray-400">Nenhum produto disponível nesta categoria.</p>
+<% end %>

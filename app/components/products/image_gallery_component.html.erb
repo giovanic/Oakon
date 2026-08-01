@@ -1,0 +1,17 @@
+<% if product.images.attached? %>
+  <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
+    <% product.images.each do |image| %>
+      <div class="group relative">
+        <%= image_tag image, class: "h-24 w-24 rounded object-cover ring-1 ring-gray-200", alt: product.name %>
+        <%= button_to admin_product_image_path(product, image),
+              method: :delete,
+              class: "absolute right-1 top-1 hidden h-5 w-5 rounded-full bg-red-600 text-xs leading-none text-white group-hover:block",
+              form: { data: { turbo_confirm: "Remover esta imagem?" } } do %>
+          &times;
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-sm text-gray-500">Nenhuma imagem cadastrada.</p>
+<% end %>

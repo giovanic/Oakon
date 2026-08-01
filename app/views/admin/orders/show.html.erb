@@ -1,0 +1,67 @@
+<div class="mx-auto max-w-lg p-6">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">Pedido #<%= @order.id %></h1>
+    <%= render OrderStatusBadgeComponent.new(status: @order.status) %>
+  </div>
+
+  <% if @order.errors.any? %>
+    <p class="mb-4 text-sm text-red-600"><%= @order.errors.full_messages.to_sentence %></p>
+  <% end %>
+
+  <dl class="space-y-2 text-sm">
+    <div>
+      <dt class="font-medium text-gray-500">Cliente</dt>
+      <dd class="text-gray-900"><%= @order.customer_name.presence || "—" %></dd>
+    </div>
+    <div>
+      <dt class="font-medium text-gray-500">E-mail</dt>
+      <dd class="text-gray-900"><%= @order.customer_email.presence || "—" %></dd>
+    </div>
+    <div>
+      <dt class="font-medium text-gray-500">Telefone</dt>
+      <dd class="text-gray-900"><%= @order.customer_phone.presence || "—" %></dd>
+    </div>
+    <div>
+      <dt class="font-medium text-gray-500">Criado em</dt>
+      <dd class="text-gray-900"><%= l(@order.created_at, format: :long) %></dd>
+    </div>
+  </dl>
+
+  <h2 class="mt-6 mb-2 text-sm font-semibold text-gray-900">Itens</h2>
+  <div class="overflow-hidden rounded border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Produto</th>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Qtd.</th>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Preço un.</th>
+          <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white">
+        <% @order.purchase_items.each do |item| %>
+          <tr>
+            <td class="px-4 py-2 text-sm text-gray-900"><%= item.product.name %></td>
+            <td class="px-4 py-2 text-sm text-gray-500"><%= item.quantity %></td>
+            <td class="px-4 py-2 text-sm text-gray-500"><%= number_to_currency(item.unit_price || item.product.price) %></td>
+            <td class="px-4 py-2 text-sm text-gray-500"><%= number_to_currency(item.subtotal) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4 flex items-center justify-between text-sm font-semibold text-gray-900">
+    <span>Total</span>
+    <span><%= number_to_currency(@order.total_price) %></span>
+  </div>
+
+  <div class="mt-6 flex items-center gap-3">
+    <% if policy(@order).cancel? && (@order.pending? || @order.paid?) %>
+      <%= button_to "Cancelar pedido", cancel_admin_order_path(@order), method: :patch,
+            class: "rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-500",
+            form: { data: { turbo_confirm: "Cancelar este pedido? O estoque será devolvido." } } %>
+    <% end %>
+    <%= link_to "Voltar", admin_orders_path, class: "text-sm text-gray-600 hover:underline" %>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<% content_for :title, "Pedido ##{@order.id}" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <h1 class="text-2xl font-semibold">Pedido #<%= @order.id %></h1>
+  <%= render Storefront::OrderStatusBadgeComponent.new(status: @order.status) %>
+</div>
+
+<% if @order.pending? %>
+  <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">Seu pedido foi recebido e está aguardando confirmação de pagamento.</p>
+<% end %>
+
+<div class="flex flex-col gap-3">
+  <% @order.purchase_items.includes(:product).each do |item| %>
+    <div class="flex items-center justify-between gap-3 rounded border border-gray-200 p-3 dark:border-gray-800">
+      <div>
+        <p class="font-medium"><%= item.product.name %></p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><%= item.quantity %> x <%= number_to_currency(item.unit_price) %></p>
+      </div>
+      <span class="font-semibold"><%= number_to_currency(item.subtotal) %></span>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-800">
+  <span class="text-lg font-semibold">Total</span>
+  <span class="text-lg font-semibold"><%= number_to_currency(@order.total_price) %></span>
+</div>
+
+<% if @order.address %>
+  <div class="mt-6">
+    <h2 class="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Endereço de entrega</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      <%= @order.address.street %>, <%= @order.address.number %>
+      <% if @order.address.complement.present? %> - <%= @order.address.complement %><% end %><br>
+      <%= @order.address.neighborhood %> - <%= @order.address.city %>/<%= @order.address.state %><br>
+      CEP <%= @order.address.zip_code %>
+    </p>
+  </div>
+<% end %>
+
+<%= link_to "Ver produtos", root_path, class: "mt-6 inline-block text-sm font-medium hover:underline" %>
