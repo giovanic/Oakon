@@ -73,3 +73,12 @@ gem "pundit", "~> 2.5"
 gem "view_component", "~> 4.12"
 
 gem "pagy", "~> 9.4"
+
+# Background jobs [https://github.com/sidekiq/sidekiq]
+gem "sidekiq"
+
+# Official Mercado Pago Ruby SDK [https://github.com/mercadopago/sdk-ruby]
+# `require:` is explicit because Bundler's autorequire otherwise resolves the gem name
+# "mercadopago-sdk" to lib/mercadopago/sdk.rb directly, skipping lib/mercadopago.rb
+# (the file that requires Payment, Webhook::Validator, and every other resource class).
+gem "mercadopago-sdk", "~> 3.2", require: "mercadopago"

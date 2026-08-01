@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_01_162609) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_01_170951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -100,6 +100,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_01_162609) do
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
+  create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "purchase_id", null: false
+    t.string "mp_payment_id", null: false
+    t.integer "payment_method", null: false
+    t.integer "status", default: 0, null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.integer "installments"
+    t.string "status_detail"
+    t.text "qr_code"
+    t.text "qr_code_base64"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mp_payment_id"], name: "index_payments_on_mp_payment_id", unique: true
+    t.index ["purchase_id"], name: "index_payments_on_purchase_id"
+    t.check_constraint "amount > 0::numeric", name: "payments_amount_must_be_positive"
+    t.check_constraint "installments IS NULL OR installments > 0", name: "payments_installments_must_be_positive"
+    t.check_constraint "payment_method >= 0 AND payment_method <= 1", name: "payments_payment_method_must_be_valid"
+    t.check_constraint "status >= 0 AND status <= 4", name: "payments_status_must_be_valid"
+  end
+
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "category_id", null: false
     t.string "name", null: false
@@ -147,6 +167,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_01_162609) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "purchases"
+  add_foreign_key "payments", "purchases"
   add_foreign_key "products", "categories"
   add_foreign_key "purchase_items", "products"
   add_foreign_key "purchase_items", "purchases"

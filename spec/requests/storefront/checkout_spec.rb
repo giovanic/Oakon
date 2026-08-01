@@ -40,13 +40,13 @@ RSpec.describe "Storefront::Checkout", type: :request do
   end
 
   describe "POST /finalizar-pedido" do
-    it "places the order and redirects to the confirmation page" do
+    it "places the order and redirects to the payment page" do
       post purchase_items_path, params: { product_id: product.id, quantity: 2 }
       purchase = Purchase.last
 
       post checkout_path, params: valid_params
 
-      expect(response).to redirect_to(order_path(purchase))
+      expect(response).to redirect_to(new_order_payment_path(purchase))
       expect(purchase.reload).to be_pending
     end
 

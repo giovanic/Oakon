@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  namespace :webhooks do
+    post "mercado_pago", to: "mercado_pago#create"
+  end
+
   scope module: "storefront" do
     root to: "home#index"
     get "produtos/:slug", to: "products#show", as: :product
@@ -31,6 +35,11 @@ Rails.application.routes.draw do
     resource :purchase, only: :show, path: "carrinho"
     resources :purchase_items, only: %i[create update destroy], path: "carrinho/itens"
     resource :checkout, only: %i[new create], path: "finalizar-pedido"
-    resources :orders, only: :show, path: "pedidos"
+
+    resources :orders, only: :show, path: "pedidos" do
+      resource :payment, only: :new, path: "pagamento", controller: "payments"
+      resource :pix_payment, only: :create, path: "pagamento/pix", controller: "payments/pix"
+      resource :credit_card_payment, only: :create, path: "pagamento/cartao", controller: "payments/credit_cards"
+    end
   end
 end

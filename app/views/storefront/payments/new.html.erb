@@ -1,0 +1,46 @@
+<% content_for :title, "Pagamento - Pedido ##{@order.id}" %>
+
+<h1 class="mb-2 text-2xl font-semibold">Pagamento</h1>
+<p class="mb-6 text-sm text-gray-500 dark:text-gray-400">Pedido #<%= @order.id %> &middot; Total <%= number_to_currency(@order.total_price) %></p>
+
+<div
+  data-controller="payment"
+  data-payment-public-key-value="<%= @mercado_pago_public_key %>"
+  data-payment-amount-value="<%= @order.total_price %>"
+  data-payment-pix-url-value="<%= order_pix_payment_path(@order) %>"
+  data-payment-card-url-value="<%= order_credit_card_payment_path(@order) %>"
+  data-payment-order-status-url-value="<%= order_path(@order, format: :json) %>"
+  data-payment-order-url-value="<%= order_path(@order) %>"
+  class="space-y-8"
+>
+  <div class="flex gap-2">
+    <button type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium data-[active]:bg-gray-900 data-[active]:text-white dark:border-gray-700" data-action="payment#showCard" data-payment-target="cardTab" data-active>
+      Cartão de crédito
+    </button>
+    <button type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium data-[active]:bg-gray-900 data-[active]:text-white dark:border-gray-700" data-action="payment#showPix" data-payment-target="pixTab">
+      PIX
+    </button>
+  </div>
+
+  <div data-payment-target="cardSection">
+    <div id="payment-brick-card"></div>
+    <p class="mt-2 hidden text-sm text-red-700 dark:text-red-400" data-payment-target="cardError"></p>
+  </div>
+
+  <div class="hidden space-y-4" data-payment-target="pixSection">
+    <button type="button" class="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" data-action="payment#generatePix" data-payment-target="pixButton">
+      Gerar QR Code PIX
+    </button>
+    <p class="hidden text-sm text-red-700 dark:text-red-400" data-payment-target="pixError"></p>
+
+    <div class="hidden space-y-3 rounded border border-gray-200 p-4 dark:border-gray-800" data-payment-target="pixResult">
+      <img data-payment-target="qrImage" alt="QR Code PIX" class="mx-auto h-48 w-48">
+      <div>
+        <label class="block text-sm font-medium">PIX copia e cola</label>
+        <textarea readonly data-payment-target="qrCode" class="mt-1 block w-full rounded border-gray-300 text-xs dark:border-gray-700 dark:bg-gray-900" rows="3"></textarea>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400" data-payment-target="pixExpiry"></p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Aguardando confirmação do pagamento...</p>
+    </div>
+  </div>
+</div>

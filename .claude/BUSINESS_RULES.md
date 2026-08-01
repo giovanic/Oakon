@@ -15,3 +15,9 @@ Preço promocional nunca pode ser maior que preço normal.
 Administrador pode cancelar pedidos.
 
 Cliente não pode editar pedidos pagos.
+
+PIX expirado (30 minutos sem pagamento) devolve estoque, igual a pedido cancelado.
+
+Cartão de crédito recusado não cancela o pedido: cliente pode tentar pagar novamente (novo pagamento), estoque continua reservado.
+
+Parcelamento no cartão de crédito usa os juros definidos pelo próprio Mercado Pago, não da loja.

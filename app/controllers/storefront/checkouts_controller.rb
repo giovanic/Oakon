@@ -9,7 +9,7 @@ class Storefront::CheckoutsController < Storefront::BaseController
     @form = Checkout::Form.new(purchase: @purchase, attributes: checkout_params)
 
     if @form.save
-      redirect_to order_path(@purchase), notice: "Pedido realizado com sucesso."
+      redirect_to new_order_payment_path(@purchase), notice: "Pedido realizado com sucesso."
     else
       render :new, status: :unprocessable_content
     end

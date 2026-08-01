@@ -10,6 +10,7 @@ class Purchase < ApplicationRecord
   has_many :purchase_items, dependent: :destroy
   has_many :products, through: :purchase_items
   has_one :address, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   validates :token, presence: true, uniqueness: true
 
