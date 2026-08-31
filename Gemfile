@@ -70,6 +70,6 @@ group :development do
 end
 
 gem "pundit", "~> 2.5"
-gem "view_component", "~> 4.12"
+gem "view_component", "~> 4.15"
 
 gem "pagy", "~> 9.4"
