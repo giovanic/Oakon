@@ -72,4 +72,4 @@ end
 gem "pundit", "~> 2.5"
 gem "view_component", "~> 4.12"
 
-gem "pagy", "~> 9.4"
+gem "pagy", "~> 43.8"
